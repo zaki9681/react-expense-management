@@ -59,7 +59,7 @@ const App = () => {
   );
 
   // 編集可能かどうかの状態を追加
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
 
   // ステートが更新されたらローカルストレージに保存する
   useEffect(() => {
@@ -114,35 +114,46 @@ const App = () => {
       </Box>
 
       <Container maxWidth="md">
-        <Box>
+        <Box mt={2}>
           {/* 使える金額の表示 */}
-          <Typography variant="h5">使える金額: {calculateAvailableAmount()}円</Typography>
-          <Box>
+          <Typography variant="h5">
+            残り: {calculateAvailableAmount()}円
+          </Typography>
+          <Box mb={2}>
             {/* 変動支出の入力フィールド */}
             <TextField
+              fullWidth
+              id="standard-size-small"
               label="金額"
               type="number"
               name="amount"
               value={variableExpense.amount}
               onChange={handleVariableExpenseChange}
               margin="normal"
+              size="normal"
+              variant="standard"
             />
             <TextField
+              fullWidth
               label="説明"
               type="text"
               name="text"
               value={variableExpense.text}
               onChange={handleVariableExpenseChange}
               margin="normal"
+              size="normal"
+              variant="standard"
             />
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleVariableExpenseSubmit}
-              style={{ marginTop: '1rem' }}
-            >
-              登録
-            </Button>
+            <Box mt={1}>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleVariableExpenseSubmit}
+                disableElevation
+              >
+                登録
+              </Button>
+            </Box>
           </Box>
 
           <Accordion>
@@ -154,35 +165,71 @@ const App = () => {
               {isEditable ? (
                 <>
                   <TextField
+                    fullWidth
                     label="固定収入"
                     type="number"
                     value={income}
                     onChange={(e) => setIncome(e.target.value)}
                     margin="normal"
+                    size="normal"
+                    variant="standard"
                   />
                   <TextField
+                    fullWidth
                     label="固定支出"
                     type="number"
                     value={fixedExpenses}
                     onChange={(e) => setFixedExpenses(e.target.value)}
-                    margin="normal"
+                    margin="dense"
+                    size="normal"
+                    variant="standard"
                   />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={toggleEdit}
-                    style={{ marginTop: '1rem' }}
-                  >
-                    保存
-                  </Button>
+                  <Box mt={1}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={toggleEdit}
+                      disableElevation
+                    >
+                      保存
+                    </Button>
+                  </Box>
                 </>
               ) : (
                 <>
-                  <p>固定収入: {income}円</p>
-                  <p>固定支出: {fixedExpenses}円</p>
-                  <Button variant="contained" onClick={toggleEdit}>
-                    編集
-                  </Button>
+                  <TextField
+                    fullWidth
+                    label="固定収入"
+                    type="number"
+                    value={income}
+                    margin="normal"
+                    size="normal"
+                    variant="filled"
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                  <TextField
+                    fullWidth
+                    label="固定支出"
+                    type="number"
+                    value={fixedExpenses}
+                    margin="dense"
+                    size="normal"
+                    variant="filled"
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                  <Box mt={1}>
+                    <Button
+                      variant="contained"
+                      onClick={toggleEdit}
+                      disableElevation
+                    >
+                      編集
+                    </Button>
+                  </Box>
                 </>
               )}
             </AccordionDetails>
@@ -205,7 +252,7 @@ const App = () => {
                 .map((expense) => (
                   <TableRow key={expense.id}>
                     <TableCell align="">{formatDate(expense.id)}</TableCell>
-                    <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row" align="right">
                       {expense.amount}円
                     </TableCell>
                     <TableCell align="">{expense.text}</TableCell>
